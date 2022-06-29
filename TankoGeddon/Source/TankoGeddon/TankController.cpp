@@ -4,6 +4,11 @@
 #include "TankController.h"
 #include "TankPawn.h"
 
+ATankController::ATankController()
+{
+	bShowMouseCursor = true;
+}
+
 void ATankController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -18,6 +23,20 @@ void ATankController::SetPawn(APawn* InPawn)
 	Super::SetPawn(InPawn);
 
 	TankPawn = Cast<ATankPawn>(InPawn);
+}
+
+void ATankController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	FVector mouseDirection;
+	DeprojectMousePositionToWorld(MousePos, mouseDirection);
+	FVector TankPosition = TankPawn->GetActorLocation();
+	MousePos.Z = TankPosition.Z;
+	FVector dir = MousePos - TankPosition;
+	dir.Normalize();
+	MousePos = TankPosition + dir * 1000.0f;
+	//DrawDebugLine(GetWorld(), TankPosition, MousePos, FColor::Green, false, 0.5f, 0, 5);
+
 }
 
 void ATankController::MoveForward(float Value)

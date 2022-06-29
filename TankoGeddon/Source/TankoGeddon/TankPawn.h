@@ -43,11 +43,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	float MoveSpeed = 100.0f;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-	float TargetForwardAxisValue = 0.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	float RotateSpeed = 75.0f;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-		float TargetRightAxisValue = 0.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	float InterpolationKey = 0.1f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	float RotateInterpolationKey = 0.1f;
+
+	UPROPERTY()
+	class ATankController* TankController;
 
 public:	
 	// Called every frame
@@ -56,4 +62,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+private:
+	float TargetForwardAxisValue = 0.0f;
+	float TargetRightAxisValue = 0.0f;
+	float RotateRightAxisValue = 0.0f;
+	float CurrentRotateAxisValue = 0.0f;
 };
