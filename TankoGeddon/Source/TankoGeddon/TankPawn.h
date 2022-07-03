@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
-
+class UStaticMeshComponent;
+class ACanon;
 UCLASS()
 class TANKOGEDDON_API ATankPawn : public APawn
 {
@@ -22,6 +23,8 @@ public:
 	virtual void BeginPlay() override;
 
 	void RotateRight(float Value);
+
+	void Fire();
 	
 
 protected:
@@ -29,22 +32,28 @@ protected:
 	
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		UStaticMeshComponent* BodyMesh;
+	UStaticMeshComponent* BodyMesh;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		UStaticMeshComponent* TurretMesh;
+	UStaticMeshComponent* TurretMesh;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		class USpringArmComponent* SpringArm;
+	class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		class UCameraComponent* Camera;
+	class UCameraComponent* Camera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret | Components")
+	TSubclassOf<ACanon> CannonClass;
+
+	UPROPERTY()
+	ACanon* Cannon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	float MoveSpeed = 100.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-	float RotateSpeed = 75.0f;
+	float RotateSpeed = 55.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	float InterpolationKey = 0.1f;
@@ -54,6 +63,8 @@ protected:
 
 	UPROPERTY()
 	class ATankController* TankController;
+
+	void SetupCannon();
 
 public:	
 	// Called every frame
