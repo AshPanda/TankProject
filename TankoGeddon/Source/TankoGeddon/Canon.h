@@ -18,6 +18,9 @@ public:
 
 	void Fire();
 	void Reload();
+	void FireSpecial();
+	void Burst();
+	
 
 protected:
 
@@ -27,13 +30,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	class UArrowComponent* ProjectileSpawnPoint;
 	// Called when the game starts or when spawned
-	//virtual void BeginPlay() override;
+	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	ECannonType CannonType;
 
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+		//float FireRate = 1;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire")
+		float FireRange = 100;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire")
+		float FireDamage = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+	int32 Bullets = 15;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+	int32 BurstSize = 3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+	float BurstInterval = 0.1f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float ReloadTime = 1.0f;
+
 	FTimerHandle ReloadTimer;
+	FTimerHandle BurstTimer;
+
 
 public:	
 	// Called every frame
@@ -41,4 +60,6 @@ public:
 
 private:
 	bool bCanFire = true;
+	int32 CurrrentBurst = 0;
+	
 };

@@ -116,6 +116,14 @@ void ATankPawn::Fire()
 	}
 }
 
+void ATankPawn::FireSpecial()
+{
+	if (Cannon)
+	{
+		Cannon->FireSpecial();
+	}
+}
+
 // Called to bind functionality to input
 void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

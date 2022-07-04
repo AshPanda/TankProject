@@ -39,4 +39,7 @@ protected:
 
 	UFUNCTION()
 	void Fire();
+
+	UFUNCTION()
+	void FireSpecial();
 };
