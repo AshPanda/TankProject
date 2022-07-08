@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameStruct.h"
+#include "Projectile.h"
 #include "Canon.generated.h"
 
 UCLASS()
@@ -39,7 +40,7 @@ protected:
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 		//float FireRate = 1;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire")
-		float FireRange = 100;
+		float FireRange = 3000;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire")
 		float FireDamage = 1;
 
@@ -53,6 +54,9 @@ protected:
 
 	FTimerHandle ReloadTimer;
 	FTimerHandle BurstTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire")
+	TSubclassOf<AProjectile> ProjectileClass;
 
 	FHitResult hitResult;
 public:	
