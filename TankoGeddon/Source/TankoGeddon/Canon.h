@@ -22,6 +22,8 @@ public:
 	void Burst();
 	
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+	int32 Bullets = 15;
 protected:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Components")
@@ -40,8 +42,7 @@ protected:
 		float FireRange = 100;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire")
 		float FireDamage = 1;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	int32 Bullets = 15;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int32 BurstSize = 3;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
@@ -53,7 +54,7 @@ protected:
 	FTimerHandle ReloadTimer;
 	FTimerHandle BurstTimer;
 
-
+	FHitResult hitResult;
 public:	
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;

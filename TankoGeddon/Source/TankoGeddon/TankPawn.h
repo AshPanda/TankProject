@@ -48,6 +48,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret | Components")
 	TSubclassOf<ACanon> CannonClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret | Components")
+	class UArrowComponent* CannonSetupPoint;
+
 	UPROPERTY()
 	ACanon* Cannon;
 
@@ -66,7 +69,7 @@ protected:
 	UPROPERTY()
 	class ATankController* TankController;
 
-	void SetupCannon();
+	
 
 public:	
 	// Called every frame
@@ -74,6 +77,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupCannon(TSubclassOf<ACanon> newCannonClass);
 
 
 private:

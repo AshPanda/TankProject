@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+
 #include "TankPawn.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -8,6 +9,9 @@
 #include "TankController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Canon.h"
+#include <Components/SceneComponent.h>
+#include <Engine/EngineTypes.h>
+#include <Components/ArrowComponent.h>
 
 // Sets default values
 ATankPawn::ATankPawn()
@@ -27,6 +31,9 @@ ATankPawn::ATankPawn()
 	SpringArm->bInheritRoll = false;
 	SpringArm->bInheritYaw = false;
 
+	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
+	CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
+
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
@@ -45,9 +52,9 @@ void ATankPawn::MoveRight(float Value)
 
 
 
-void ATankPawn::SetupCannon()
+void ATankPawn::SetupCannon(TSubclassOf<ACanon> newCannonClass)
 {
-	if (!CannonClass)
+	if (!newCannonClass)
 	{
 		return;
 	}
@@ -59,8 +66,8 @@ void ATankPawn::SetupCannon()
 	params.Instigator = this;
 	params.Owner = this;
 
-	Cannon = GetWorld()->SpawnActor<ACanon>(CannonClass, params);
-	Cannon->AttachToComponent(TurretMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	Cannon = GetWorld()->SpawnActor<ACanon>(newCannonClass, params);
+	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
 void ATankPawn::Tick(float DeltaSeconds)
@@ -77,7 +84,7 @@ void ATankPawn::Tick(float DeltaSeconds)
 	float YawRotation = RotateSpeed * CurrentRotateAxisValue * DeltaSeconds;
 	FRotator CurrentRotation = GetActorRotation();
 	
-	UE_LOG(LogTemp, Warning, TEXT("CurrentRotateAxis Value: %f, RotateRightAxisValue: %f"), CurrentRotateAxisValue, RotateRightAxisValue);
+	//UE_LOG(LogTemp, Warning, TEXT("CurrentRotateAxis Value: %f, RotateRightAxisValue: %f"), CurrentRotateAxisValue, RotateRightAxisValue);
 	YawRotation += CurrentRotation.Yaw;
 	FRotator newRotation = FRotator(0.0f, YawRotation, 0.0f);
 	SetActorRotation(newRotation);
@@ -100,7 +107,7 @@ void ATankPawn::BeginPlay()
 
 	TankController = Cast<ATankController>(GetController());
 
-	SetupCannon();
+	SetupCannon(CannonClass);
 }
 
 void ATankPawn::RotateRight(float Value)
