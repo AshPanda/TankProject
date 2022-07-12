@@ -15,12 +15,13 @@ class TANKOGEDDON_API ATankPawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATankPawn();
+	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
 
-	virtual void BeginPlay() override;
+	
 
 	void RotateRight(float Value);
 
@@ -69,7 +70,6 @@ protected:
 	UPROPERTY()
 	class ATankController* TankController;
 
-	
 
 public:	
 	// Called every frame

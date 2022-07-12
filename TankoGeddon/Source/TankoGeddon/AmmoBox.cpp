@@ -25,16 +25,31 @@ AAmmoBox::AAmmoBox()
 
 }
 
+int32 AAmmoBox::getInt()
+{
+	return BulletsBox;
+}
+
+
+
 void AAmmoBox::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ATankPawn* TankPawn = Cast<ATankPawn>(OtherActor);
+
+	ACanon* Bullets = Cast<ACanon>(OtherActor);
 
 	if (TankPawn)
 	{
 		TankPawn->SetupCannon(CannonClass);
 		Destroy();
-
 	}
+
+	if (Bullets)
+	{
+		Bullets->Bullets = Bullets->Bullets + BulletsBox;
+		this->Destroy();
+	}
+	
 }
 
 

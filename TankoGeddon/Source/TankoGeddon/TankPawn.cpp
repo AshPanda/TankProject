@@ -9,6 +9,7 @@
 #include "TankController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Canon.h"
+#include "AmmoBox.h"
 #include <Components/SceneComponent.h>
 #include <Engine/EngineTypes.h>
 #include <Components/ArrowComponent.h>
@@ -69,6 +70,10 @@ void ATankPawn::SetupCannon(TSubclassOf<ACanon> newCannonClass)
 	Cannon = GetWorld()->SpawnActor<ACanon>(newCannonClass, params);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
+
+
+
+
 
 void ATankPawn::Tick(float DeltaSeconds)
 {

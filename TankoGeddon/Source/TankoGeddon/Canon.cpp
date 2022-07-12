@@ -7,6 +7,8 @@
 #include "TimerManager.h"
 #include "Engine/Engine.h"
 
+
+
 // Sets default values
 ACanon::ACanon()
 {
@@ -134,6 +136,9 @@ void ACanon::Burst()
 	GetWorld()->GetTimerManager().SetTimer(BurstTimer, this, &ACanon::Burst, BurstInterval, false);
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACanon::Reload, ReloadTime, false);
 }
+
+
+
 
 // Called when the game starts or when spawned
 void ACanon::BeginPlay()
