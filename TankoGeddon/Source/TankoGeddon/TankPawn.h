@@ -29,7 +29,8 @@ public:
 
 	void FireSpecial();
 	
-
+	UPROPERTY()
+	ACanon* CannonBullets; 
 protected:
 	// Called when the game starts or when spawned
 	
@@ -69,6 +70,8 @@ protected:
 
 	UPROPERTY()
 	class ATankController* TankController;
+
+	
 
 
 public:	

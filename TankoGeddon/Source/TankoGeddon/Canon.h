@@ -22,7 +22,10 @@ public:
 	void FireSpecial();
 	void Burst();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-		int32 Bullets = 15;
+	int32 Bullets = 15;
+	UFUNCTION()
+	int32 getInt();
+
 
 protected:
 

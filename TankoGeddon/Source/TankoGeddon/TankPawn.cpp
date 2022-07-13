@@ -113,6 +113,10 @@ void ATankPawn::BeginPlay()
 	TankController = Cast<ATankController>(GetController());
 
 	SetupCannon(CannonClass);
+
+	//CannonBullets = Cast<ACanon>(ACanon::getInt());
+
+	//CannonBullets->Bullets = CannonBullets->Bullets;
 }
 
 void ATankPawn::RotateRight(float Value)

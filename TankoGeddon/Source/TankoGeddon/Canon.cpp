@@ -140,6 +140,11 @@ void ACanon::Burst()
 
 
 
+int32 ACanon::getInt()
+{
+	return Bullets;
+}
+
 // Called when the game starts or when spawned
 void ACanon::BeginPlay()
 {
