@@ -23,8 +23,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	class UStaticMeshComponent* NewAmmoMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<class ACanon> CannonClass;
+
 	UFUNCTION()
-		void OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 public:	
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;

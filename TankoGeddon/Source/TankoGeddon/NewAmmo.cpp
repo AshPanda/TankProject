@@ -3,6 +3,7 @@
 
 #include "NewAmmo.h"
 #include "Canon.h"
+#include "TankPawn.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -16,7 +17,7 @@ ANewAmmo::ANewAmmo()
 	USceneComponent* NewAmmoSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = NewAmmoSceneComponent;
 
-	NewAmmoMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoBoxMesh"));
+	NewAmmoMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NewAmmoMesh"));
 	NewAmmoMesh->SetupAttachment(RootComponent);
 	NewAmmoMesh->OnComponentBeginOverlap.AddDynamic(this, &ANewAmmo::OnMeshOverlapBegin);
 	NewAmmoMesh->SetCollisionProfileName(FName("OverlapAll"));
@@ -34,16 +35,13 @@ ANewAmmo::ANewAmmo()
 
 void ANewAmmo::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ACanon* newBullets = Cast<ACanon>(OtherActor);
+	ATankPawn* TankPawn = Cast<ATankPawn>(OtherActor);
 
-	if (!newBullets)
-    {
-	  return;
-     }
 
-	if (newBullets)
-	  {
-		newBullets->Bullets = newBullets->Bullets + BulletsBox;
+	if (TankPawn)
+	{
+		TankPawn->AddMoreBullets(OtherActor);
+		TankPawn->SetupCannon(CannonClass);
 		this->Destroy();
 	}
 

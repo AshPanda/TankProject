@@ -34,9 +34,9 @@ void ACanon::Fire()
 
 	bCanFire = false;
 	Bullets--;
-	if (CannonType == ECannonType::FireProjectile)
+	if (CannonType == ECannonType::FireProjectile || CannonType == ECannonType::FireProjectilePlazma)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projectile")));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projectile/Plazma")));
 		FTransform projectileTransform(ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation(), FVector(1));
 		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
 		if (projectile)
@@ -100,9 +100,9 @@ void ACanon::Burst()
 	}
 	CurrrentBurst++;
 	
-	if (CannonType == ECannonType::FireProjectile)
+	if (CannonType == ECannonType::FireProjectile || CannonType == ECannonType::FireProjectilePlazma)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projectile")));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projectile/Plazma")));
 		FTransform projectileTransform(ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation(), FVector(1));
 		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
 		if (projectile)
@@ -140,10 +140,10 @@ void ACanon::Burst()
 
 
 
-int32 ACanon::getInt()
-{
-	return Bullets;
-}
+//int32 ACanon::getInt()
+//{
+	//return Bullets;
+//}
 
 // Called when the game starts or when spawned
 void ACanon::BeginPlay()

@@ -10,6 +10,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Canon.h"
 #include "AmmoBox.h"
+#include "NewAmmo.h"
 #include <Components/SceneComponent.h>
 #include <Engine/EngineTypes.h>
 #include <Components/ArrowComponent.h>
@@ -137,6 +138,23 @@ void ATankPawn::FireSpecial()
 	if (Cannon)
 	{
 		Cannon->FireSpecial();
+	}
+}
+
+void ATankPawn::AddMoreBullets(AActor* OtherActor)
+{
+	ACanon* moreBullets = Cast<ACanon>(OtherActor);
+	ANewAmmo* BulletsBox = Cast<ANewAmmo>(OtherActor);
+
+	if (!BulletsBox)
+	{
+		return;
+	}
+
+	if (BulletsBox)
+	{
+		moreBullets->Bullets = moreBullets->Bullets + BulletsBox->BulletsBox;
+		this->Destroy();
 	}
 }
 

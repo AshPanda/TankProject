@@ -29,8 +29,14 @@ public:
 
 	void FireSpecial();
 	
+	//UPROPERTY()
+	//ACanon* CannonBullets; 
+
 	UPROPERTY()
-	ACanon* CannonBullets; 
+	ACanon* newBullets;
+
+	UFUNCTION()
+	void AddMoreBullets(AActor* OtherActor);
 protected:
 	// Called when the game starts or when spawned
 	

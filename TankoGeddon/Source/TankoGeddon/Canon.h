@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GameStruct.h"
 #include "Projectile.h"
+#include "TankPawn.h"
 #include "Canon.generated.h"
 
 UCLASS()
@@ -23,8 +24,10 @@ public:
 	void Burst();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int32 Bullets = 15;
-	UFUNCTION()
-	int32 getInt();
+	//UFUNCTION()
+	//int32 getInt
+	UPROPERTY()
+	ATankPawn* newBullets;
 
 
 protected:
