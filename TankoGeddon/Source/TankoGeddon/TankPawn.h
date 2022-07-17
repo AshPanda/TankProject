@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
+
 class UStaticMeshComponent;
 class ACanon;
+class ANewAmmo;
+class AAmmoBox;
 UCLASS()
 class TANKOGEDDON_API ATankPawn : public APawn
 {
@@ -21,22 +24,25 @@ public:
 
 	void MoveRight(float Value);
 
-	
-
 	void RotateRight(float Value);
 
 	void Fire();
 
 	void FireSpecial();
+
+	void AddBullets();
 	
-	//UPROPERTY()
-	//ACanon* CannonBullets; 
+;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret | Components")
+	int32 ammoPool = 0;
+
 
 	UPROPERTY()
-	ACanon* newBullets;
+	AAmmoBox* ammo;
 
-	UFUNCTION()
-	void AddMoreBullets(AActor* OtherActor);
+	UPROPERTY()
+	ACanon* Cannon;
+
 protected:
 	// Called when the game starts or when spawned
 	
@@ -59,11 +65,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret | Components")
 	class UArrowComponent* CannonSetupPoint;
 
-	UPROPERTY()
-	ACanon* Cannon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-	float MoveSpeed = 100.0f;
+	float MoveSpeed = 35.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	float RotateSpeed = 55.0f;

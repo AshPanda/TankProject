@@ -9,8 +9,6 @@
 #include "TankController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Canon.h"
-#include "AmmoBox.h"
-#include "NewAmmo.h"
 #include <Components/SceneComponent.h>
 #include <Engine/EngineTypes.h>
 #include <Components/ArrowComponent.h>
@@ -52,8 +50,6 @@ void ATankPawn::MoveRight(float Value)
 }
 
 
-
-
 void ATankPawn::SetupCannon(TSubclassOf<ACanon> newCannonClass)
 {
 	if (!newCannonClass)
@@ -71,9 +67,6 @@ void ATankPawn::SetupCannon(TSubclassOf<ACanon> newCannonClass)
 	Cannon = GetWorld()->SpawnActor<ACanon>(newCannonClass, params);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
-
-
-
 
 
 void ATankPawn::Tick(float DeltaSeconds)
@@ -114,10 +107,6 @@ void ATankPawn::BeginPlay()
 	TankController = Cast<ATankController>(GetController());
 
 	SetupCannon(CannonClass);
-
-	//CannonBullets = Cast<ACanon>(ACanon::getInt());
-
-	//CannonBullets->Bullets = CannonBullets->Bullets;
 }
 
 void ATankPawn::RotateRight(float Value)
@@ -127,10 +116,22 @@ void ATankPawn::RotateRight(float Value)
 
 void ATankPawn::Fire()
 {
+	
 	if (Cannon)
 	{
 		Cannon->Fire();
+		if (ammoPool > 0)
+		{
+			Cannon->Fire();
+			ammoPool--;
+		}
+		else
+		{
+			Cannon->StopFire();
+		}
+		
 	}
+	
 }
 
 void ATankPawn::FireSpecial()
@@ -138,25 +139,32 @@ void ATankPawn::FireSpecial()
 	if (Cannon)
 	{
 		Cannon->FireSpecial();
+		if (ammoPool > 0)
+		{
+			Cannon->FireSpecial();
+			ammoPool--;
+		}
+		else
+		{
+			Cannon->StopFire();
+		}
+
+	}
+	
+}
+
+
+
+void ATankPawn::AddBullets()
+{           
+	if (Cannon)
+	{
+		Cannon->Bullets = ammoPool;
+		//UE_LOG(LogTemp, Warning, TEXT("Ammo in TankPawn ADD_Bullets Canon->Bullets: %d"), Cannon->Bullets);
+
 	}
 }
 
-void ATankPawn::AddMoreBullets(AActor* OtherActor)
-{
-	ACanon* moreBullets = Cast<ACanon>(OtherActor);
-	ANewAmmo* BulletsBox = Cast<ANewAmmo>(OtherActor);
-
-	if (!BulletsBox)
-	{
-		return;
-	}
-
-	if (BulletsBox)
-	{
-		moreBullets->Bullets = moreBullets->Bullets + BulletsBox->BulletsBox;
-		this->Destroy();
-	}
-}
 
 // Called to bind functionality to input
 void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

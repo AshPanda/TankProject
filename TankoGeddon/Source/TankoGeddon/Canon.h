@@ -7,8 +7,10 @@
 #include "GameStruct.h"
 #include "Projectile.h"
 #include "TankPawn.h"
+#include "AmmoBox.h"
 #include "Canon.generated.h"
 
+class AAmmoBox;
 UCLASS()
 class TANKOGEDDON_API ACanon : public AActor
 {
@@ -22,12 +24,13 @@ public:
 	void Reload();
 	void FireSpecial();
 	void Burst();
+
+	void StopFire();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	int32 Bullets = 15;
-	//UFUNCTION()
-	//int32 getInt
+	int32 Bullets = 3;
+
 	UPROPERTY()
-	ATankPawn* newBullets;
+	ATankPawn* Tank;
 
 
 protected:
@@ -65,8 +68,6 @@ protected:
 
 	FHitResult hitResult;
 public:	
-	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
 
 private:
 	bool bCanFire = true;

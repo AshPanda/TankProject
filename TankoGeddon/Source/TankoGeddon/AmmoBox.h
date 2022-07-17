@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "Canon.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "AmmoBox.generated.h"
 
+class ACanon;
 UCLASS()
 class TANKOGEDDON_API AAmmoBox : public AActor
 {
@@ -16,8 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	AAmmoBox();
 
-
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoBox")
+	int32 BulletBox = 5;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")

@@ -23,6 +23,7 @@ ACanon::ACanon()
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjectileSpawnPoint"));
 	ProjectileSpawnPoint->SetupAttachment(CannonSceneComponent);
+
 }
 
 void ACanon::Fire()
@@ -67,8 +68,8 @@ void ACanon::Fire()
 		}
 		
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Number of bullets left: %d"), Bullets));
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACanon::Reload, ReloadTime, false);
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Number of bullets left: %d"), Bullets));
 }
 
 
@@ -86,6 +87,7 @@ void ACanon::FireSpecial()
 void ACanon::Reload()
 {
 	bCanFire = true;
+	
 }
 void ACanon::Burst()
 {
@@ -95,7 +97,6 @@ void ACanon::Burst()
 		bCanFire = true;
 		CurrrentBurst = 0;
 		Bullets--;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Number of bullets left: %d"), Bullets));
 		return;
 	}
 	CurrrentBurst++;
@@ -131,8 +132,7 @@ void ACanon::Burst()
 			DrawDebugLine(GetWorld(), start, end, FColor::Purple, false, 0.5f, 0, 15);
 		}
 	}
-	
-	
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Number of bullets left: %d"), Bullets));
 	GetWorld()->GetTimerManager().SetTimer(BurstTimer, this, &ACanon::Burst, BurstInterval, false);
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACanon::Reload, ReloadTime, false);
 }
@@ -140,23 +140,15 @@ void ACanon::Burst()
 
 
 
-//int32 ACanon::getInt()
-//{
-	//return Bullets;
-//}
+void ACanon::StopFire()
+{
+	bCanFire = false;
+}
 
 // Called when the game starts or when spawned
 void ACanon::BeginPlay()
 {
 	Super::BeginPlay();
-	//Reload();
+	
 	
 }
-/*
-// Called every frame
-void ACanon::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-*/
