@@ -42,4 +42,7 @@ protected:
 
 	UFUNCTION()
 	void FireSpecial();
+
+	UFUNCTION()
+	void WeaponChange();
 };

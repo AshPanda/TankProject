@@ -10,13 +10,21 @@ UCLASS()
 class TANKOGEDDON_API AProjectile : public AActor
 {
 	GENERATED_BODY()
+
+	DECLARE_EVENT_OneParam(AProjectile, FOnKill, float);
 	
 public:	
 	// Sets default values for this actor's properties
 	AProjectile();
 
 	UFUNCTION()
-	void Start();
+	virtual void Start();
+
+	void Deactivate();
+
+	FOnKill OnKilled;
+
+	bool bIsActivation = false;
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,10 +40,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float Damage = 10.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	float DeactivateTime = 2.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	float PushForce = 1000.0f;
+
+
 	FTimerHandle MoveTimer;
+	FTimerHandle DeactivateTimer;
 	// Called when the game starts or when spawned
 	UFUNCTION()
-	void Move();
+	virtual void Move();
 
 	UFUNCTION()
 	void OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

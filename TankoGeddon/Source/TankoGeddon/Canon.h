@@ -10,11 +10,14 @@
 #include "AmmoBox.h"
 #include "Canon.generated.h"
 
+class APool;
 class AAmmoBox;
 UCLASS()
 class TANKOGEDDON_API ACanon : public AActor
 {
 	GENERATED_BODY()
+
+	DECLARE_EVENT_OneParam(ACanon, FChangeScore, float);
 	
 public:	
 	// Sets default values for this actor's properties
@@ -32,7 +35,16 @@ public:
 	UPROPERTY()
 	ATankPawn* Tank;
 
+	bool IsReadyToFire() { return bCanFire; };
 
+	float Score = 0.0f;
+
+	UFUNCTION()
+	void AddScore(float ScoreValue);
+
+	FChangeScore ScoreChanged;
+
+	void CreateProjectilePool();
 protected:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Components")
@@ -67,8 +79,12 @@ protected:
 	TSubclassOf<AProjectile> ProjectileClass;
 
 	FHitResult hitResult;
-public:	
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<APool> ProjectilePoolClass;
+
+	UPROPERTY()
+	APool* ProjectilePool;
 private:
 	bool bCanFire = true;
 	int32 CurrrentBurst = 0;
