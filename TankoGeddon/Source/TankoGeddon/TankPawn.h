@@ -47,7 +47,8 @@ public:
 
 	//UPROPERTY()
 	//ACanon* Cannon;
-
+	UPROPERTY()
+	class APawn* PlayerPawn;
 
 	UFUNCTION()
 	float GetAccurency() { return MovementAccurency; }

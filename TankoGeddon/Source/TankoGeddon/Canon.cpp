@@ -7,6 +7,7 @@
 #include "TimerManager.h"
 #include "Engine/Engine.h"
 #include "Projectile.h"
+#include "DamageTaker.h"
 #include "DrawDebugHelpers.h"
 #include "Pool.h"
 
@@ -53,6 +54,7 @@ void ACanon::Fire()
 				projectile->OnKilled.AddUObject(this, &ACanon::AddScore);
 				projectile->SetOwner(this);
 				projectile->Start();
+				
 			}
 		}
 		
@@ -68,9 +70,28 @@ void ACanon::Fire()
 		if (GetWorld()->LineTraceSingleByChannel(hitResult, start, end, ECollisionChannel::ECC_Visibility, traceParams))
 		{
 			DrawDebugLine(GetWorld(), start, hitResult.Location, FColor::Red, false, 0.5f, 0, 20);
+
+			
 			if (hitResult.GetActor())
 			{
-				hitResult.GetActor()->Destroy();
+				
+				AActor* owner = GetOwner();
+				AActor* ownerByOwner = owner != nullptr ? owner->GetOwner() : nullptr;
+				if (hitResult.GetActor() != owner && hitResult.GetActor() != ownerByOwner)
+				{
+					FDamageData damageData;
+				    damageData.DamageValue = FireDamage;
+					damageData.Instigator = owner;
+					damageData.DamageMaker = this;
+
+					//Tank->GetActor();
+					Tank->TakeDamage(damageData);//крашится при попадании
+				}
+				else
+				{
+					hitResult.GetActor()->Destroy();
+				}
+
 			}
 		}
 		else

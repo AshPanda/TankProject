@@ -119,9 +119,7 @@ void ATankPawn::Tick(float DeltaSeconds)
 void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, 0.0f));
-
-	TankController = Cast<ATankController>(GetController());
+	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 	SetupCannon(EquippedCannonClass);
 }
@@ -136,6 +134,7 @@ void ATankPawn::Fire()
 	
 	if (Cannon)
 	{
+		
 		//Cannon->Fire();
 		if (ammoPool > 0)
 		{
@@ -146,9 +145,10 @@ void ATankPawn::Fire()
 		{
 			Cannon->StopFire();
 		}
-		
+		ShowScore(Score);
+
 	}
-	
+
 }
 
 void ATankPawn::FireSpecial()
@@ -165,7 +165,7 @@ void ATankPawn::FireSpecial()
 		{
 			Cannon->StopFire();
 		}
-
+		ShowScore(Score);
 	}
 	
 }

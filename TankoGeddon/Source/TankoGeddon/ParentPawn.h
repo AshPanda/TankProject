@@ -7,6 +7,7 @@
 #include "DamageTaker.h"
 #include "GameStruct.h"
 #include "IScorable.h"
+#include "HealthComponent.h"//
 #include "ParentPawn.generated.h"
 
 class UStaticMeshComponent;
@@ -25,7 +26,7 @@ public:
 	virtual float GetPoints() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scorable")
-	float ScoreValue = 0;
+	float ScoreValue = 5.5f;
 
 	UFUNCTION()
 	void ShowScore(float Value);

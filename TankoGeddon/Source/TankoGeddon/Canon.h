@@ -7,7 +7,9 @@
 #include "GameStruct.h"
 #include "Projectile.h"
 #include "TankPawn.h"
+#include "DamageTaker.h"
 #include "AmmoBox.h"
+#include "Turret.h"
 #include "Canon.generated.h"
 
 class APool;
@@ -18,6 +20,7 @@ class TANKOGEDDON_API ACanon : public AActor
 	GENERATED_BODY()
 
 	DECLARE_EVENT_OneParam(ACanon, FChangeScore, float);
+	DECLARE_EVENT(ACanon, FOnKill);
 	
 public:	
 	// Sets default values for this actor's properties
@@ -33,6 +36,8 @@ public:
 	int32 Bullets = 3;
 
 	UPROPERTY()
+	ATurret* Turret;
+	UPROPERTY()
 	ATankPawn* Tank;
 
 	bool IsReadyToFire() { return bCanFire; };
@@ -45,6 +50,11 @@ public:
 	FChangeScore ScoreChanged;
 
 	void CreateProjectilePool();
+
+	FOnKill OnKilled;
+
+	//UPROPERTY()
+	IDamageTaker* damageTaker;
 protected:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Components")
@@ -85,6 +95,7 @@ protected:
 
 	UPROPERTY()
 	APool* ProjectilePool;
+
 private:
 	bool bCanFire = true;
 	int32 CurrrentBurst = 0;

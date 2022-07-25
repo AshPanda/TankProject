@@ -43,8 +43,8 @@ float AParentPawn::GetPoints()
 
 void AParentPawn::ShowScore(float Value)
 {
-	Score += Value;
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Score: %f"), Score));
+	Score += ScoreValue;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Silver, FString::Printf(TEXT("Score: %f"), Score));
 }
 
 // Called when the game starts or when spawned
@@ -61,7 +61,10 @@ void AParentPawn::Die()
 	{
 		Cannon->Destroy();
 	}
+	
 	Destroy();
+	//ShowScore(Score);
+	
 }
 
 void AParentPawn::DamageTaked(float DamageValue)

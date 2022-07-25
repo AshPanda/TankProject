@@ -7,6 +7,7 @@
 #include "DamageTaker.h"
 #include "GameStruct.h"
 #include "ParentPawn.h"
+#include "HealthComponent.h"//
 #include "Turret.generated.h"
 
 class UStaticMeshComponent;
@@ -41,7 +42,7 @@ protected:
 	float TargetingSpeed = 0.1f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
-	float TargetingRate = 0.005f;
+	float TargetingRate = 0.01f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
 	float Accurency = 30.0f;

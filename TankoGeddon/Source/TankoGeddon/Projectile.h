@@ -38,7 +38,7 @@ protected:
 	float MoveRate = 0.01f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	float Damage = 10.0f;
+	float Damage = 2.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float DeactivateTime = 2.5f;

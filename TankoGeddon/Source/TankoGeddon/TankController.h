@@ -45,4 +45,7 @@ protected:
 
 	UFUNCTION()
 	void WeaponChange();
+
+	UFUNCTION()
+	void TurretRotate(FVector TargetPosition);
 };

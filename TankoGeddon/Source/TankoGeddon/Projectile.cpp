@@ -7,6 +7,7 @@
 #include "Components/SceneComponent.h"
 #include "DamageTaker.h"
 #include "GameStruct.h"
+#include "ParentPawn.h"
 #include "IScorable.h"
 
 // Sets default values
@@ -55,12 +56,13 @@ void AProjectile::OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, 
 	{
 		IDamageTaker* damageTakerActor = Cast<IDamageTaker>(OtherActor);
 		IIScorable* ScorableActor = Cast<IIScorable>(OtherActor);
-
+		
 		float ScoreValue = 0.0f;
 
 		if (ScorableActor)
 		{
 			ScoreValue = ScorableActor->GetPoints();
+			
 		}
 
 		if (damageTakerActor)
@@ -77,8 +79,11 @@ void AProjectile::OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, 
 				if (OnKilled.IsBound())
 				{
 					OnKilled.Broadcast(ScoreValue);
+					
 				}
+				
 			}
+			
 		}
 		else
 		{
@@ -96,7 +101,7 @@ void AProjectile::OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, 
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Mesh is not vallid"));
 			}
-			OtherActor->Destroy();
+			
 		}
 
 		Deactivate();
