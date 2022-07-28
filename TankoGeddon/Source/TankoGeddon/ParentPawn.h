@@ -8,6 +8,8 @@
 #include "GameStruct.h"
 #include "IScorable.h"
 #include "HealthComponent.h"//
+#include "Components/AudioComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "ParentPawn.generated.h"
 
 class UStaticMeshComponent;
@@ -32,6 +34,17 @@ public:
 	void ShowScore(float Value);
 
 	float Score = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Effects")
+	UParticleSystemComponent* ShootEffectKilled;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Effects")
+	UAudioComponent* AudioEffectKilled;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Effects")
+	UParticleSystemComponent* ShootEffectDamaged;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Effects")
+	UAudioComponent* AudioEffectDamaged;
+	UPROPERTY()
+	float DeathTime = 5.0f;
+	FTimerHandle DeathTimer;
 
 protected:
 	// Called when the game starts or when spawned
@@ -54,8 +67,11 @@ protected:
 
 	UFUNCTION()
 		void Die();
-
+	UFUNCTION()
+		void DeathDelay();
 	UFUNCTION()
 		void DamageTaked(float DamageValue);
 
+private:
+	bool bCanDie = true;
 };

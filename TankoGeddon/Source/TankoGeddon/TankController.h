@@ -22,8 +22,9 @@ public:
 
 	virtual void SetPawn(APawn* InPawn) override;
 	UPROPERTY()
-	FVector MousePos;
+	FVector MousePos = FVector::Zero();
 	FVector GetMousePosition() { return MousePos; }
+
 
 	virtual void Tick(float DeltaSeconds) override;
 

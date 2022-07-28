@@ -10,6 +10,10 @@
 #include "DamageTaker.h"
 #include "AmmoBox.h"
 #include "Turret.h"
+#include "Camera\CameraShakeBase.h"
+#include "Components/AudioComponent.h"
+#include "GameFramework/ForceFeedbackEffect.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Canon.generated.h"
 
 class APool;
@@ -95,6 +99,15 @@ protected:
 
 	UPROPERTY()
 	APool* ProjectilePool;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UParticleSystemComponent* ShootEffect;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UAudioComponent* AudioEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Effects")
+	TSubclassOf<class UCameraShakeBase> CameraShakeEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	UForceFeedbackEffect * ShootForceEffect;
 
 private:
 	bool bCanFire = true;

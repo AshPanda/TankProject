@@ -59,4 +59,6 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TSubclassOf<ACanon> EquippedCannonClass;
 
+	
+
 };

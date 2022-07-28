@@ -28,6 +28,11 @@ ACanon::ACanon()
 	ProjectileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjectileSpawnPoint"));
 	ProjectileSpawnPoint->SetupAttachment(CannonSceneComponent);
 
+	ShootEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootEffect"));
+	ShootEffect->SetupAttachment(ProjectileSpawnPoint);
+
+	AudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioEffect"));
+
 }
 
 void ACanon::Fire()
@@ -39,6 +44,26 @@ void ACanon::Fire()
 
 	bCanFire = false;
 	Bullets--;
+
+	ShootEffect->ActivateSystem();
+	AudioEffect->Play();
+
+	if (GetOwner() && GetOwner() ==
+		GetWorld()->GetFirstPlayerController()->GetPawn())
+	{
+		if(ShootForceEffect)
+		{
+			FForceFeedbackParameters shootForceEffectParams;
+			shootForceEffectParams.bLooping = false;
+			shootForceEffectParams.Tag = "shootForceEffectParams";
+			GetWorld()->GetFirstPlayerController()->ClientPlayForceFeedback(ShootForceEffect,
+			shootForceEffectParams);
+		}
+		if (CameraShakeEffect)
+		{
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(CameraShakeEffect);
+		}
+	}
 	if (CannonType == ECannonType::FireProjectile || CannonType == ECannonType::FireProjectilePlazma  )
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Fire projectile/Plazma")));
@@ -85,13 +110,14 @@ void ACanon::Fire()
 					damageData.DamageMaker = this;
 
 					//Tank->GetActor();
-					Tank->TakeDamage(damageData);//крашится при попадании
+					//Tank->TakeDamage(damageData);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+					
 				}
 				else
 				{
 					hitResult.GetActor()->Destroy();
 				}
-
+				hitResult.GetActor()->Destroy();
 			}
 		}
 		else
@@ -129,6 +155,25 @@ void ACanon::Burst()
 		bCanFire = true;
 		CurrrentBurst = 0;
 		Bullets--;
+		ShootEffect->ActivateSystem();
+		AudioEffect->Play();
+
+		if (GetOwner() && GetOwner() ==
+			GetWorld()->GetFirstPlayerController()->GetPawn())
+		{
+			if(ShootForceEffect)
+			{
+				FForceFeedbackParameters shootForceEffectParams;
+				shootForceEffectParams.bLooping = false;
+				shootForceEffectParams.Tag = "shootForceEffectParams";
+				GetWorld()->GetFirstPlayerController()->ClientPlayForceFeedback(ShootForceEffect,
+				shootForceEffectParams);
+			}
+			if (CameraShakeEffect)
+			{
+				GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(CameraShakeEffect);
+			}
+		}
 		return;
 	}
 	CurrrentBurst++;

@@ -27,6 +27,12 @@ AParentPawn::AParentPawn()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDie.AddUObject(this, &AParentPawn::Die);
 	HealthComponent->OnHealthChanged.AddUObject(this, &AParentPawn::DamageTaked);
+	ShootEffectKilled = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootEffectOnKill"));
+	ShootEffectKilled->SetupAttachment(BoxComponent);
+	AudioEffectKilled = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioEffectOnKill"));
+	ShootEffectDamaged = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootEffectOnDamage"));
+	ShootEffectDamaged->SetupAttachment(BodyMesh);
+	AudioEffectDamaged = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioEffectOnDamage"));
 }
 
 void AParentPawn::TakeDamage(FDamageData DamageData)
@@ -57,18 +63,60 @@ void AParentPawn::BeginPlay()
 
 void AParentPawn::Die()
 {
+	bCanDie=false;
+	if (!ShootEffectKilled)
+	{
+		return;
+	}
+	else
+	{
+		ShootEffectKilled->ActivateSystem();
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, FString::Printf(TEXT("Object Killed")));
+		
+	}
+	if (!AudioEffectKilled)
+	{
+		return;
+	}
+	else
+	{
+		AudioEffectKilled->Play();
+	}
 	if (Cannon)
 	{
+		
 		Cannon->Destroy();
 	}
-	
+	GetWorld()->GetTimerManager().SetTimer(DeathTimer, this, &AParentPawn::DeathDelay, DeathTime, false);
 	Destroy();
 	//ShowScore(Score);
 	
 }
 
+void AParentPawn::DeathDelay()
+{
+	bCanDie=true;
+}
+
 void AParentPawn::DamageTaked(float DamageValue)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Turret %s take Damage: %f,  Health: %f"), *GetName(), DamageValue, HealthComponent->GetHealth());
+	if (!ShootEffectDamaged)
+	{
+		return;
+	}
+	else
+	{
+		ShootEffectDamaged->ActivateSystem();
+	}
+	if (!AudioEffectDamaged)
+	{
+		return;
+	}
+	else
+	{
+		AudioEffectDamaged->Play();
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Object %s take Damage: %f,  Health: %f"), *GetName(), DamageValue, HealthComponent->GetHealth());
 }
 

@@ -19,7 +19,7 @@ void ATankController::SetupInputComponent()
 	InputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, & ATankController::Fire);
 	InputComponent->BindAction("FireSpecialBurst", EInputEvent::IE_Pressed, this, &ATankController::FireSpecial);
 	InputComponent->BindAction("WeaponChange", EInputEvent::IE_Pressed, this, &ATankController::WeaponChange);
-	//InputComponent->BindVectorAxis("TurretRotation", EInputEvent::IE_Pressed, this, &ATankController::TurretRotate);
+	InputComponent->BindVectorAxis("TurretRotation",  this, &ATankController::TurretRotate);
 }
 
 void ATankController::SetPawn(APawn* InPawn)

@@ -21,10 +21,9 @@ protected:
 	UPROPERTY()
 	class APawn* PlayerPawn;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI | Movement")
-	TArray<FVector> PatrollingPath;
-
-	int32 CurrentPatrolingIndex = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Patrolpoints" , Meta = (MakeEditWidget = true))
+    TArray<FVector> PatrollingPoints;
+	int32 CurrentPatrollingIndex = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI | Movement")
 	float MovementAccurency;

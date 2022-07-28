@@ -14,7 +14,7 @@ class ACanon;
 class ANewAmmo;
 class AAmmoBox;
 UCLASS()
-class TANKOGEDDON_API ATankPawn : public AParentPawn
+class TANKOGEDDON_API ATankPawn : public AParentPawn/*, public IDamageTaker, public IIScorable*/
 {
 	GENERATED_BODY()
 
@@ -52,6 +52,9 @@ public:
 
 	UFUNCTION()
 	float GetAccurency() { return MovementAccurency; }
+
+	UFUNCTION()
+    TArray<FVector> GetPatrollingPoints() {return PatrollingPoints;};
 
 	UFUNCTION()
 	FVector GetTurretForwardVector();
@@ -100,8 +103,9 @@ protected:
 	UPROPERTY()
 	class ATankController* TankController;
 
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI | Components")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Patrol points" , Meta = (MakeEditWidget = true))
+    TArray<FVector> PatrollingPoints;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI |Moveparams|Accurency")
 	float MovementAccurency = 30.0f;
 
 	
