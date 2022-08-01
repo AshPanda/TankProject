@@ -28,7 +28,7 @@ AParentPawn::AParentPawn()
 	HealthComponent->OnDie.AddUObject(this, &AParentPawn::Die);
 	HealthComponent->OnHealthChanged.AddUObject(this, &AParentPawn::DamageTaked);
 	ShootEffectKilled = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootEffectOnKill"));
-	ShootEffectKilled->SetupAttachment(BoxComponent);
+	ShootEffectKilled->SetupAttachment(BodyMesh);
 	AudioEffectKilled = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioEffectOnKill"));
 	ShootEffectDamaged = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootEffectOnDamage"));
 	ShootEffectDamaged->SetupAttachment(BodyMesh);

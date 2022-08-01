@@ -7,6 +7,7 @@
 #include "GameStruct.h"
 #include "DamageTaker.h"
 #include "ParentPawn.h"
+#include "Engine/TargetPoint.h"
 #include "TankPawn.generated.h"
 
 class UStaticMeshComponent;
@@ -54,7 +55,9 @@ public:
 	float GetAccurency() { return MovementAccurency; }
 
 	UFUNCTION()
-    TArray<FVector> GetPatrollingPoints() {return PatrollingPoints;};
+    TArray<FVector> GetPatrollingPoints();
+
+	void SetPatrollingPoints(TArray<ATargetPoint*> NewPatrollingPoints);
 
 	UFUNCTION()
 	FVector GetTurretForwardVector();
@@ -104,7 +107,7 @@ protected:
 	class ATankController* TankController;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Patrol points" , Meta = (MakeEditWidget = true))
-    TArray<FVector> PatrollingPoints;
+    TArray<ATargetPoint*> PatrollingPoints;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI |Moveparams|Accurency")
 	float MovementAccurency = 30.0f;
 
@@ -127,3 +130,4 @@ private:
 	float RotateRightAxisValue = 0.0f;
 	float CurrentRotateAxisValue = 0.0f;
 };
+

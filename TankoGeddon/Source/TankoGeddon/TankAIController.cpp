@@ -118,6 +118,10 @@ void ATankAIController::Fire()
 
 bool ATankAIController::IsPlayerSeen()
 {
+	if(!PlayerPawn)
+	{
+		Initialize();
+	}
 	FVector playerPos = PlayerPawn->GetActorLocation();
 	FVector eyesPos = TankPawn->GetEyesPosition();
 
@@ -145,7 +149,10 @@ void ATankAIController::Initialize()
 	TankPawn = Cast<ATankPawn>(GetPawn());
 
 	if (!TankPawn)
+	{
 		return;
+	}
+		
 	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 	FVector pawnLocation = TankPawn->GetActorLocation();
@@ -159,3 +166,4 @@ void ATankAIController::Initialize()
 	//
 	CurrentPatrollingIndex = 0;
 }
+
