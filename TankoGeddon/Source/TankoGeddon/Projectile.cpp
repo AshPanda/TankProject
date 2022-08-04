@@ -9,6 +9,7 @@
 #include "GameStruct.h"
 #include "ParentPawn.h"
 #include "IScorable.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -40,14 +41,141 @@ void AProjectile::Deactivate()
 	SetActorEnableCollision(false);
 }
 
+void AProjectile::Explode()
+{
+	FVector startPos = GetActorLocation();
+	FVector endPos = startPos + FVector(0.1f);
+
+	FCollisionShape Shape = FCollisionShape::MakeSphere(ExplodeRadius);
+	FCollisionQueryParams params = FCollisionQueryParams::DefaultQueryParam;
+	params.AddIgnoredActor(this);
+	params.bTraceComplex = true;
+	params.TraceTag = "Explode Trace";
+
+	TArray<FHitResult> AttachHit;
+
+	FQuat Rotation = FQuat::Identity;
+
+	bool bSweepResult = GetWorld()->SweepMultiByChannel(AttachHit, startPos, endPos, Rotation, ECollisionChannel::ECC_Visibility, Shape, params);
+
+	DrawDebugSphere(GetWorld(), startPos, ExplodeRadius, 5, FColor::Green, false, 2.0f);
+
+	if (bSweepResult)
+	{
+		for (FHitResult hitResult : AttachHit)
+		{
+			AActor* OtherActor = hitResult.GetActor();
+			if(!OtherActor)
+				continue;
+
+			IDamageTaker* DamageTakerActor = Cast<IDamageTaker>(OtherActor);
+			if (DamageTakerActor)
+			{
+				FDamageData damageData;
+				damageData.DamageValue = Damage;
+				damageData.Instigator = GetOwner();
+				damageData.DamageMaker = this;
+
+				DamageTakerActor->TakeDamage(damageData);
+			}
+			else
+			{
+				UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(OtherActor->GetRootComponent());
+				if (mesh)
+				{
+					if (mesh->IsSimulatingPhysics())
+					{
+						FVector forceVector = OtherActor->GetActorLocation() - GetActorLocation();
+						forceVector.Normalize();
+						mesh->AddForce(forceVector * PushForce, NAME_None, true);
+					}
+				}
+			}
+		}
+	}
+	
+}
+
+void AProjectile::TakeDamageAndMovement(class AActor* OtherActor)
+{
+	AActor* owner = GetOwner();
+	AActor* ownerByOwner = owner != nullptr ? owner->GetOwner() : nullptr;
+
+	if (OtherActor != owner && OtherActor != ownerByOwner)
+	{
+		IDamageTaker* damageTakerActor = Cast<IDamageTaker>(OtherActor);
+		IIScorable* ScorableActor = Cast<IIScorable>(OtherActor);
+		
+		float ScoreValue = 0.0f;
+
+		if (ScorableActor)
+		{
+			ScoreValue = ScorableActor->GetPoints();
+			
+		}
+
+		if (damageTakerActor)
+		{
+			FDamageData damageData;
+			damageData.DamageValue = Damage;
+			damageData.Instigator = owner;
+			damageData.DamageMaker = this;
+
+			damageTakerActor->TakeDamage(damageData);
+
+			if (OtherActor->IsActorBeingDestroyed() && ScoreValue != 0.0f)
+			{
+				if (OnKilled.IsBound())
+				{
+					OnKilled.Broadcast(ScoreValue);
+					
+				}
+				
+			}
+			
+		}
+		else
+		{
+			UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(OtherActor->GetRootComponent());
+			if (mesh)
+			{
+				if (mesh->IsSimulatingPhysics())
+				{
+					FVector forceVector = OtherActor->GetActorLocation() - GetActorLocation();
+					forceVector.Normalize();
+					mesh->AddForce(forceVector * PushForce, NAME_None, true);
+					if (bIsExplodeActivated)
+					{
+						Explode();
+					}
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Mesh is not vallid"));
+			}
+			
+		}
+
+		Deactivate();
+		
+	}
+	
+}
+
 void AProjectile::Move()
 {
 	FVector nextPosition = GetActorLocation() + GetActorForwardVector() * MoveSpeed * MoveRate;
 	SetActorLocation(nextPosition);
+	if (bIsExplodeActivated)
+	{
+		Explode();
+	}
 }
 
 void AProjectile::OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+
 	//UE_LOG(LogTemp, Warning, TEXT("Projectile %s collided with %s. "), *GetName(), *OtherActor->GetName());
 	AActor* owner = GetOwner();
 	AActor* ownerByOwner = owner != nullptr ? owner->GetOwner() : nullptr;
@@ -94,7 +222,11 @@ void AProjectile::OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, 
 				{
 					FVector forceVector = OtherActor->GetActorLocation() - GetActorLocation();
 					forceVector.Normalize();
-					mesh->AddImpulse(forceVector * PushForce, NAME_None, true);
+					mesh->AddForce(forceVector * PushForce, NAME_None, true);
+					if (bIsExplodeActivated)
+					{
+						Explode();
+					}
 				}
 			}
 			else

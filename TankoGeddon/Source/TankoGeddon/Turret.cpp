@@ -20,17 +20,7 @@ ATurret::ATurret()
 	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSetupPoint"));
 	CannonSetupPoint->SetupAttachment(TurretMesh);
 
-	UStaticMesh* BodyMeshTemp = LoadObject<UStaticMesh>(this, *BodyMeshPath);
-	if(BodyMeshTemp)
-	{
-		BodyMesh->SetStaticMesh(BodyMeshTemp);
-	}
-		
-	UStaticMesh* TurretMeshTemp = LoadObject<UStaticMesh>(this, *TurretMeshPath);
-	if (TurretMeshTemp)
-	{
-		TurretMesh->SetStaticMesh(TurretMeshTemp);
-	}
+
 		
 
 }

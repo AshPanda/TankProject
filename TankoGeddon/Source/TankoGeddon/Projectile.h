@@ -25,6 +25,11 @@ public:
 	FOnKill OnKilled;
 
 	bool bIsActivation = false;
+	virtual void Explode();
+	
+	bool bIsExplodeActivated = false;
+	
+	void TakeDamageAndMovement(class AActor* OtherActor);
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,6 +51,28 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float PushForce = 1000.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params")
+	float ExplodeRadius = 50.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params")
+	TArray<FVector> CurrentTrajectory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params")
+	int32 TrajectoryPointIndex;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params")
+	float MovementAccurency = 10.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UPhysicsComponent* PhysicsComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params | Trajectory")
+	float MaxTimeSimulation = 50.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params | Trajectory")
+	float TimeStep = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params | Trajectory")
+	float MoveSpeedPhysics = 50.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement params")
+	FVector MoveVector;
 
 	FTimerHandle MoveTimer;
 	FTimerHandle DeactivateTimer;
